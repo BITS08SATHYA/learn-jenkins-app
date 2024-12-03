@@ -26,7 +26,7 @@ pipeline{
                 sh '''
                     # Download and install AWS CLI
                     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-                    unzip awscliv2
+                    unzip awscliv2.zip
                     ./aws/install
                     aws --version
                 '''
@@ -37,7 +37,7 @@ pipeline{
             steps{
                 sh '''
                     # Configure AWS CLI (example credentials, replace with your actual ones)
-                    echo 'Working cool'
+                    echo 'AWS CLI is installed successfully!'
                 '''
             }
         }
