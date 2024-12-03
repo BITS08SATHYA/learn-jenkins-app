@@ -31,14 +31,21 @@ pipeline{
 //         }
 
         stage('Install AWS CLI'){
+            agent{
+                docker{
+                    image 'amazon/aws-cli:latest'
+                    reuseNode true
+                }
+            }
             steps{
                 sh '''
-                    apt-get update && apt-get install -y sudo
+                    # apt-get update && apt-get install -y sudo
                     # Download and install AWS CLI
-                    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-                    unzip -o awscliv2.zip
-                    ./aws/install -b $HOME/.local/bin
-                    $HOME/.local/bin/aws --version
+                    #curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                    #unzip -o awscliv2.zip
+                    #./aws/install -b $HOME/.local/bin
+                    #$HOME/.local/bin/aws --version
+                    aws --version
                 '''
             }
         }
@@ -51,17 +58,5 @@ pipeline{
                 '''
             }
         }
-
-
-
-
-
-
-
-
-
-
     }
-
-
 }
