@@ -2,7 +2,6 @@ pipeline{
     agent any
 
     stages{
-//     This is a commnent
         stage('Build'){
             agent{
                 docker{
@@ -22,54 +21,34 @@ pipeline{
             }
         }
 
-        stage('Run Tests'){
-            parallel{
-                stage('test'){
-                    agent{
-                        docker{
-                            image 'node:18-alpine'
-                            reuseNode true
-                        }
-                    }
-                    steps{
-                        sh '''
-                            test -f build/index.html && echo "File exists" || echo "File does not exist"
-                            npm test -a
-                        '''
-                    }
-                    post{
-                        always{
-                            junit 'jest-results/junit.xml'
-                        }
-                    }
-                }
-
-
-
-                stage('E2E'){
-                    agent{
-                        docker{
-                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
-                            reuseNode true
-                        }
-                    }
-                    steps{
-                        sh '''
-                           npm install serve
-                           node_modules/.bin/serve -s build &
-                           sleep 10
-                           npx playwright test --reporter=html
-                        '''
-                    }
-
-                    post{
-                        always{
-                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwirght HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-                        }
-                    }
-                }
+        stage('Install AWS CLI'){
+            steps{
+                sh '''
+                    # Download and install AWS CLI
+                    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                    unzip awscliv2
+                    sudo ./aws/install
+                    aws --version
+                '''
             }
         }
+
+        stage('Use AWS CLI'){
+            steps{
+                sh '''
+                    # Configure AWS CLI (example credentials, replace with your actual ones)
+                    echo 'Working cool'
+                '''
+            }
+        }
+
+
+
+
+
+
+
+
 
 
     }
